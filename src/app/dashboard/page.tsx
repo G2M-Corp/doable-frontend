@@ -39,9 +39,9 @@ export default function DashboardPage() {
     const [newTaskCategory, setNewTaskCategory] = useState("")
 
     const [categories, setCategories] = useState<Category[]>([
-        { id: "1", name: "trabalho", color: "bg-blue-500" },
-        { id: "2", name: "pessoal", color: "bg-green-500" },
-        { id: "3", name: "finanças", color: "bg-yellow-500" },
+        { id: "1", name: "trabalho", color: "#2B7FFF" },
+        { id: "2", name: "pessoal", color: "#00C950" },
+        { id: "3", name: "finanças", color: "#F0B100" },
     ])
 
     const [newCategory, setNewCategory] = useState("")
@@ -242,8 +242,7 @@ export default function DashboardPage() {
                                                 ))}
                                             </div>
                                         </div>
-                                    </CardContent>
-                                                )}
+                                    </CardContent> )}
                                     <CardFooter className="sticky bottom-0 bg-background border-t border-border pt-4">
                                         <form
                                             onSubmit={(e) => {
@@ -286,9 +285,6 @@ export default function DashboardPage() {
                                             Crie e gerencie categorias para organizar suas tarefas.
                                         </CardDescription>
                                     </CardHeader>
-                                    
-
-
                                     {categories.length === 0 ? (
                                         <CardContent className="flex flex-col items-center justify-center flex-1 overflow-auto pb-4">
                                             <div className="space-y-4">
@@ -311,7 +307,7 @@ export default function DashboardPage() {
                                                         className="flex items-center justify-between rounded-lg border border-border p-3"
                                                     >
                                                         <div className="flex items-center gap-3">
-                                                            <div className={`h-4 w-4 rounded-full ${category.color}`} />
+                                                            <div className={`h-4 w-4 rounded-full bg-[${category.color}]`} />
                                                             <span className="text-sm font-medium capitalize">{category.name}</span>
                                                         </div>
                                                         <Button
