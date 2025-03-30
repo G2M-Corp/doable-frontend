@@ -52,7 +52,7 @@ export default function LandingPage() {
             </p>
             <div className="mt-8">
               <Button size="lg" asChild>
-                <Link href="/cadastro">Experimente Grátis</Link>
+                <Link href="/signup">Experimente Grátis</Link>
               </Button>
             </div>
           </div>
@@ -599,7 +599,7 @@ export default function LandingPage() {
                 </p>
               </div>
               <Button size="lg" asChild className="w-full md:w-auto">
-                <Link href="/cadastro">Começar Grátis</Link>
+                <Link href="/signuo">Começar Grátis</Link>
               </Button>
             </div>
           </div>
