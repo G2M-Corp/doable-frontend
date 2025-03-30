@@ -280,15 +280,18 @@ export default function DashboardPage() {
                             </TabsContent>
                             <TabsContent value="categories">
                                 <Card className="border border-border h-[calc(100vh-200px)] flex flex-col">
-                                    <CardHeader className="sticky top-0 bg-background z-10 pb-3">
+                                    <CardHeader className="sticky top-0 bg-background z-10">
                                         <CardTitle className="text-xl">Categorias</CardTitle>
                                         <CardDescription className="text-sm text-muted-foreground">
                                             Crie e gerencie categorias para organizar suas tarefas.
                                         </CardDescription>
                                     </CardHeader>
-                                    <CardContent className="flex-1 overflow-auto pb-4">
-                                        <div className="space-y-4">
-                                            {categories.length === 0 ? (
+                                    
+
+
+                                    {categories.length === 0 ? (
+                                        <CardContent className="flex flex-col items-center justify-center flex-1 overflow-auto pb-4">
+                                            <div className="space-y-4">
                                                 <div className="flex flex-col items-center justify-center py-8 text-center">
                                                     <Circle className="h-12 w-12 text-muted-foreground/50" />
                                                     <h3 className="mt-2 text-lg font-medium">Nenhuma categoria</h3>
@@ -296,32 +299,35 @@ export default function DashboardPage() {
                                                         Adicione sua primeira categoria usando o formulário abaixo.
                                                     </p>
                                                 </div>
-                                            ) : (
-                                                <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                                                    {categories.map((category) => (
-                                                        <div
-                                                            key={category.id}
-                                                            className="flex items-center justify-between rounded-lg border border-border p-3"
-                                                        >
-                                                            <div className="flex items-center gap-3">
-                                                                <div className={`h-4 w-4 rounded-full ${category.color}`} />
-                                                                <span className="text-sm font-medium capitalize">{category.name}</span>
-                                                            </div>
-                                                            <Button
-                                                                variant="ghost"
-                                                                size="icon"
-                                                                onClick={() => deleteCategory(category.id)}
-                                                                className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                                                            >
-                                                                <Trash2 className="h-4 w-4" />
-                                                                <span className="sr-only">Excluir categoria</span>
-                                                            </Button>
+                                            </div>
+                                        </CardContent>
+                                    ) : (
+                                    <CardContent className="flex-1 overflow-auto pb-4">
+                                        <div className="space-y-4">
+                                            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                                                {categories.map((category) => (
+                                                    <div
+                                                        key={category.id}
+                                                        className="flex items-center justify-between rounded-lg border border-border p-3"
+                                                    >
+                                                        <div className="flex items-center gap-3">
+                                                            <div className={`h-4 w-4 rounded-full ${category.color}`} />
+                                                            <span className="text-sm font-medium capitalize">{category.name}</span>
                                                         </div>
-                                                    ))}
-                                                </div>
-                                            )}
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            onClick={() => deleteCategory(category.id)}
+                                                            className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                                                        >
+                                                            <Trash2 className="h-4 w-4" />
+                                                            <span className="sr-only">Excluir categoria</span>
+                                                        </Button>
+                                                    </div>
+                                                ))}
+                                            </div>
                                         </div>
-                                    </CardContent>
+                                    </CardContent> )}
                                     <CardFooter className="sticky bottom-0 bg-background border-t border-border pt-4">
                                         <form
                                             onSubmit={(e) => {
