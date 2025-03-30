@@ -10,8 +10,9 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Rocket, Home, Trash2, CheckCircle2, Circle } from "lucide-react"
+import { Rocket, Home, Trash2, CheckCircle2, Circle, Info } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { toast } from "sonner";
 
 type Task = {
     id: string
@@ -57,6 +58,22 @@ export default function DashboardPage() {
 
     const addCategory = () => {
         if (newCategory.trim() !== "") {
+            const categoryExists = categories.some(
+                (category) => category.name.toLowerCase() === newCategory.toLowerCase()
+            )
+
+            if (categoryExists) {
+                toast("Essa categoria já existe!", {
+                    duration: 2000,
+                    style: {
+                        backgroundColor: "#f87171",
+                        color: "#fff",
+                    },
+                    icon: <Info className="h-5 w-5" />,
+                })
+                return
+            }
+
             const category: Category = {
                 id: Date.now().toString(),
                 name: newCategory.toLowerCase(),
@@ -168,7 +185,7 @@ export default function DashboardPage() {
                                 </TabsTrigger>
                             </TabsList>
                             <TabsContent value="tasks">
-                                <Card className="border border-border h-[calc(100vh-200px)] flex flex-col">
+                                <Card className="border border-border h-[calc(100vh-157px)] flex flex-col">
                                     <CardHeader className="sticky top-0 bg-background z-10">
                                         <CardTitle className="text-xl">Minhas Tarefas</CardTitle>
                                         <CardDescription className="text-sm text-muted-foreground">
@@ -270,7 +287,7 @@ export default function DashboardPage() {
                                 </Card>
                             </TabsContent>
                             <TabsContent value="categories">
-                                <Card className="border border-border h-[calc(100vh-200px)] flex flex-col">
+                                <Card className="border border-border h-[calc(100vh-157px)] flex flex-col">
                                     <CardHeader className="sticky top-0 bg-background z-10">
                                         <CardTitle className="text-xl">Categorias</CardTitle>
                                         <CardDescription className="text-sm text-muted-foreground">
