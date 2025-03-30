@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Rocket } from "lucide-react"
 
-export default function CadastroPage() {
+export default function LoginPage() {
     return (
         <div className="min-h-screen flex flex-col">
             <div className="flex-1 flex items-center justify-center p-4">
@@ -17,36 +17,12 @@ export default function CadastroPage() {
                                 <span className="text-2xl font-bold">Doable</span>
                             </Link>
                         </div>
-                        <h1 className="mt-6 text-3xl font-bold">Crie sua conta</h1>
-                        <p className="mt-2 text-sm text-muted-foreground">Comece a organizar suas tarefas hoje mesmo</p>
+                        <h1 className="mt-6 text-3xl font-bold">Bem-vindo de volta</h1>
+                        <p className="mt-2 text-sm text-muted-foreground">Entre na sua conta para continuar</p>
                     </div>
                     <div className="mt-8 space-y-6">
                         <form className="space-y-6" action="#" method="POST">
                             <div className="space-y-4">
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="first-name">Nome</Label>
-                                        <Input
-                                            id="first-name"
-                                            name="first-name"
-                                            type="text"
-                                            autoComplete="given-name"
-                                            placeholder="João"
-                                            required
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label htmlFor="last-name">Sobrenome</Label>
-                                        <Input
-                                            id="last-name"
-                                            name="last-name"
-                                            type="text"
-                                            autoComplete="family-name"
-                                            placeholder="Silva"
-                                            required
-                                        />
-                                    </div>
-                                </div>
                                 <div className="space-y-2">
                                     <Label htmlFor="email">Email</Label>
                                     <Input
@@ -59,48 +35,34 @@ export default function CadastroPage() {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="password">Senha</Label>
+                                    <div className="flex items-center justify-between">
+                                        <Label htmlFor="password">Senha</Label>
+                                        <Link href="/recuperar-senha" className="text-sm font-medium text-primary hover:underline">
+                                            Esqueceu a senha?
+                                        </Link>
+                                    </div>
                                     <Input
                                         id="password"
                                         name="password"
                                         type="password"
-                                        autoComplete="new-password"
-                                        placeholder="••••••••"
-                                        required
-                                    />
-                                    <p className="text-xs text-muted-foreground">Mínimo de 8 caracteres com letras, números e símbolos</p>
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="password-confirm">Confirmar Senha</Label>
-                                    <Input
-                                        id="password-confirm"
-                                        name="password-confirm"
-                                        type="password"
-                                        autoComplete="new-password"
+                                        autoComplete="current-password"
                                         placeholder="••••••••"
                                         required
                                     />
                                 </div>
-                                <div className="flex items-start space-x-2">
-                                    <Checkbox id="terms" className="mt-1" />
+                                <div className="flex items-center space-x-2">
+                                    <Checkbox id="remember" />
                                     <label
-                                        htmlFor="terms"
+                                        htmlFor="remember"
                                         className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                     >
-                                        Eu concordo com os{" "}
-                                        <Link href="/termos" className="text-primary hover:underline">
-                                            Termos de Serviço
-                                        </Link>{" "}
-                                        e{" "}
-                                        <Link href="/privacidade" className="text-primary hover:underline">
-                                            Política de Privacidade
-                                        </Link>
+                                        Lembrar de mim
                                     </label>
                                 </div>
                             </div>
                             <div>
                                 <Button type="submit" className="w-full">
-                                    Criar Conta
+                                    Entrar
                                 </Button>
                             </div>
                         </form>
@@ -147,9 +109,9 @@ export default function CadastroPage() {
                         </div>
                         <div className="text-center text-sm">
                             <p className="text-muted-foreground">
-                                Já tem uma conta?{" "}
-                                <Link href="/login" className="font-medium text-primary hover:underline">
-                                    Faça login
+                                Não tem uma conta?{" "}
+                                <Link href="/cadastro" className="font-medium text-primary hover:underline">
+                                    Cadastre-se
                                 </Link>
                             </p>
                         </div>

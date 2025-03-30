@@ -30,7 +30,7 @@ export default function LandingPage() {
               Entrar
             </Link>
             <Button asChild size="sm">
-              <Link href="/cadastro">Começar Grátis</Link>
+              <Link href="/signup">Começar Grátis</Link>
             </Button>
           </div>
         </div>
