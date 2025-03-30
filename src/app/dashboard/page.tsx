@@ -113,7 +113,6 @@ export default function DashboardPage() {
     }
     return (
         <div className="flex min-h-screen flex-col bg-background">
-            {/* Header */}
             <header className="border-b border-border">
                 <div className="container flex h-16 items-center justify-between px-4 py-4 md:px-6">
                     <div className="flex items-center gap-2">
@@ -143,6 +142,30 @@ export default function DashboardPage() {
                     </div>
                 </div>
             </header>
+            <div className="flex flex-1">
+                <aside className="hidden w-64 flex-col border-r border-border bg-muted/40 md:flex">
+                    <div className="mt-4 px-4">
+                        <h3 className="mb-2 text-sm font-medium">Categorias</h3>
+                        {categories.length > 0 ? (
+                            <div className="space-y-1">
+                                {categories.map((category) => (
+                                    <div
+                                        key={category.id}
+                                        className="flex items-center justify-between rounded-md px-2 py-1 hover:bg-muted"
+                                    >
+                                        <div className="flex items-center gap-2">
+                                            <div className={`h-3 w-3 rounded-full ${category.color}`} />
+                                            <span className="text-sm capitalize">{category.name}</span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className="text-sm text-muted-foreground">Nenhuma categoria disponível.</p>
+                        )}
+                    </div>
+                </aside>
+            </div>
         </div>
     );
 
