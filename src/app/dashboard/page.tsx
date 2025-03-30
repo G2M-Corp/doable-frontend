@@ -112,7 +112,38 @@ export default function DashboardPage() {
         return category ? colorMap[category.color] || "bg-gray-100 text-gray-800" : ""
     }
     return (
-        <h1>Hello World!</h1>
+        <div className="flex min-h-screen flex-col bg-background">
+            {/* Header */}
+            <header className="border-b border-border">
+                <div className="container flex h-16 items-center justify-between px-4 py-4 md:px-6">
+                    <div className="flex items-center gap-2">
+                        <Rocket className="h-6 w-6 text-primary" />
+                        <span className="text-xl font-bold">Doable</span>
+                    </div>
+                    <div className="flex items-center gap-4">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" className="relative h-8 w-8 rounded-full p-0">
+                                    <img
+                                        src="https://avatars.githubusercontent.com/u/56761360?v=4"
+                                        alt="Avatar do usuário"
+                                        className="h-8 w-8 rounded-full object-cover"
+                                    />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuItem>Perfil</DropdownMenuItem>
+                                <DropdownMenuItem asChild>
+                                    <Link href="/login" className="w-full">
+                                        Sair
+                                    </Link>
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+                </div>
+            </header>
+        </div>
     );
 
 }
