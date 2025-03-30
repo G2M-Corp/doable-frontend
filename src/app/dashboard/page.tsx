@@ -95,22 +95,11 @@ export default function DashboardPage() {
         )
     }
 
-    const getCategoryBadgeClass = (categoryName?: string) => {
-        if (!categoryName) return ""
-        const category = categories.find((c) => c.name === categoryName)
-
-        const colorMap: Record<string, string> = {
-            "bg-blue-500": "bg-blue-100 text-blue-800",
-            "bg-green-500": "bg-green-100 text-green-800",
-            "bg-yellow-500": "bg-yellow-100 text-yellow-800",
-            "bg-red-500": "bg-red-100 text-red-800",
-            "bg-purple-500": "bg-purple-100 text-purple-800",
-            "bg-pink-500": "bg-pink-100 text-pink-800",
-            "bg-indigo-500": "bg-indigo-100 text-indigo-800",
-        }
-
-        return category ? colorMap[category.color] || "bg-gray-100 text-gray-800" : ""
+    const getHexColorByCategoryName = (categoryName: string) => {
+        const category = categories.find((cat) => cat.name === categoryName)
+        return category ? category.color : "#000000"
     }
+
     return (
         <div className="flex min-h-screen flex-col bg-background">
             <header className="border-b border-border">
@@ -154,7 +143,9 @@ export default function DashboardPage() {
                                         className="flex items-center justify-between rounded-md px-2 py-1 hover:bg-muted"
                                     >
                                         <div className="flex items-center gap-2">
-                                            <div className={`h-3 w-3 rounded-full ${category.color}`} />
+                                            <div 
+                                                className={`h-3 w-3 rounded-full`} 
+                                                style={{ backgroundColor: category.color }} />
                                             <span className="text-sm capitalize">{category.name}</span>
                                         </div>
                                     </div>
@@ -222,7 +213,8 @@ export default function DashboardPage() {
                                                                 {task.category && (
                                                                     <Badge
                                                                         variant="outline"
-                                                                        className={`mt-1 w-fit text-xs ${getCategoryBadgeClass(task.category)}`}
+                                                                        className={`mt-1 w-fit text-xs}`}
+                                                                        style={{ backgroundColor: getHexColorByCategoryName(task.category) }}
                                                                     >
                                                                         {task.category}
                                                                     </Badge>
@@ -307,7 +299,10 @@ export default function DashboardPage() {
                                                         className="flex items-center justify-between rounded-lg border border-border p-3"
                                                     >
                                                         <div className="flex items-center gap-3">
-                                                            <div className={`h-4 w-4 rounded-full bg-[${category.color}]`} />
+                                                            <div
+                                                                className="h-4 w-4 rounded-full"
+                                                                style={{ backgroundColor: category.color }}
+                                                            />
                                                             <span className="text-sm font-medium capitalize">{category.name}</span>
                                                         </div>
                                                         <Button
