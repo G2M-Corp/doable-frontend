@@ -599,7 +599,7 @@ export default function LandingPage() {
                 </p>
               </div>
               <Button size="lg" asChild className="w-full md:w-auto">
-                <Link href="/signuo">Começar Grátis</Link>
+                <Link href="/signup">Começar Grátis</Link>
               </Button>
             </div>
           </div>
