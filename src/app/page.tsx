@@ -4,7 +4,7 @@ import { Rocket } from "lucide-react"
 
 export default function LandingPage() {
   return (
-    <div className="flex min-h-screen w-full flex-col bg-background">
+    <div className="flex min-h-screen w-full flex-col bg-background" suppressHydrationWarning >
       <header className="w-full border-b border-border bg-background">
         <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 py-4 md:px-6">
           <div className="flex items-center gap-2">
@@ -605,6 +605,160 @@ export default function LandingPage() {
           </div>
         </section>
       </main>
+      <footer className="w-full border-t border-border bg-muted">
+        <div className="mx-auto w-full max-w-7xl px-4 py-8 md:px-6">
+          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+            <div className="flex items-center gap-2">
+              <Rocket className="h-6 w-6 text-primary" />
+              <span className="text-lg font-bold">Doable</span>
+            </div>
+            <nav className="grid grid-cols-2 gap-8 sm:grid-cols-4">
+              <div className="space-y-3">
+                <h4 className="text-sm font-medium">Produto</h4>
+                <ul className="space-y-2">
+                  <li>
+                    <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+                      Recursos
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+                      Preços
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+                      Novidades
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+              <div className="space-y-3">
+                <h4 className="text-sm font-medium">Empresa</h4>
+                <ul className="space-y-2">
+                  <li>
+                    <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+                      Sobre nós
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+                      Carreiras
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+                      Contato
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+              <div className="space-y-3">
+                <h4 className="text-sm font-medium">Recursos</h4>
+                <ul className="space-y-2">
+                  <li>
+                    <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+                      Blog
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+                      Documentação
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+                      Guias
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+              <div className="space-y-3">
+                <h4 className="text-sm font-medium">Legal</h4>
+                <ul className="space-y-2">
+                  <li>
+                    <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+                      Termos
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+                      Privacidade
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+                      Cookies
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </nav>
+          </div>
+          <div className="mt-8 border-t border-border pt-6">
+            <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+              <p className="text-sm text-muted-foreground">
+                &copy; {new Date().getFullYear()} Doable. Todos os direitos reservados.
+              </p>
+              <div className="flex space-x-4">
+                <Link href="#" className="text-muted-foreground hover:text-foreground">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="h-5 w-5"
+                  >
+                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                  </svg>
+                  <span className="sr-only">Facebook</span>
+                </Link>
+                <Link href="#" className="text-muted-foreground hover:text-foreground">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="h-5 w-5"
+                  >
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                  </svg>
+                  <span className="sr-only">Instagram</span>
+                </Link>
+                <Link href="#" className="text-muted-foreground hover:text-foreground">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="h-5 w-5"
+                  >
+                    <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
+                  </svg>
+                  <span className="sr-only">Twitter</span>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
