@@ -14,6 +14,7 @@ import { Rocket, Home, Trash2, CheckCircle2, Circle, Info } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { toast } from "sonner";
 import { CircularProgress } from "@/components/ui/circular-progress"
+import { motion } from "framer-motion"
 
 type Task = {
     id: string
@@ -189,6 +190,13 @@ export default function DashboardPage() {
                                 </TabsTrigger>
                             </TabsList>
                             <TabsContent value="tasks">
+                                <motion.div
+                                    key="tasks"
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    transition={{ duration: 0.3 }}
+                                >
                                 <Card className="border border-border h-[calc(100vh-157px)] flex flex-col">
                                     <CardHeader className="sticky top-0 bg-background z-10 flex flex-row items-start justify-between">
                                         <div>
@@ -217,9 +225,13 @@ export default function DashboardPage() {
                                         <div className="space-y-4">
                                             <div className="space-y-2">
                                                 {tasks.map((task) => (
-                                                    <div
+                                                    <motion.div
                                                         key={task.id}
-                                                        className={`flex items-center justify-between rounded-lg border border-border p-3 ${task.completed ? "bg-muted/50" : ""}`}>
+                                                        initial={{ opacity: 0, y: 10 }}
+                                                        animate={{ opacity: 1, y: 0 }}
+                                                        transition={{ duration: 0.3 }}
+                                                        className={`flex items-center justify-between rounded-lg border border-border p-3 ${task.completed ? "bg-muted/50" : ""}`}
+                                                    >
                                                         <div className="flex items-center gap-3">
                                                             <Checkbox
                                                                 checked={task.completed}
@@ -254,7 +266,7 @@ export default function DashboardPage() {
                                                             <Trash2 className="h-4 w-4" />
                                                             <span className="sr-only">Excluir tarefa</span>
                                                         </Button>
-                                                    </div>
+                                                    </motion.div>
                                                 ))}
                                             </div>
                                         </div>
@@ -286,14 +298,24 @@ export default function DashboardPage() {
                                                     ))}
                                                 </SelectContent>
                                             </Select>
-                                            <Button type="submit" size="sm">
-                                                Adicionar
-                                            </Button>
+                                            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                                                <Button type="submit" size="default">
+                                                    Adicionar
+                                                </Button>
+                                            </motion.div>
                                         </form>
                                     </CardFooter>
                                 </Card>
+                                </motion.div>
                             </TabsContent>
                             <TabsContent value="categories">
+                                <motion.div
+                                    key="categories"
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    transition={{ duration: 0.3 }}
+                                >
                                 <Card className="border border-border h-[calc(100vh-157px)] flex flex-col">
                                     <CardHeader className="sticky top-0 bg-background z-10">
                                         <CardTitle className="text-xl">Categorias</CardTitle>
@@ -369,12 +391,15 @@ export default function DashboardPage() {
                                                     className="h-10 w-10 cursor-pointer p-1"
                                                 />
                                             </div>
-                                            <Button type="submit" size="default">
-                                                Adicionar
-                                            </Button>
+                                            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                                                <Button type="submit" size="default">
+                                                    Adicionar
+                                                </Button>
+                                            </motion.div>
                                         </form>
                                     </CardFooter>
                                 </Card>
+                                </motion.div>
                             </TabsContent>
                         </Tabs>
                     </div>
