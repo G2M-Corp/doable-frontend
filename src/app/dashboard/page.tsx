@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Rocket, Home, Trash2, CheckCircle2, Circle, Info } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { toast } from "sonner";
+import { CircularProgress } from "@/components/ui/circular-progress"
 
 type Task = {
     id: string
@@ -117,6 +118,9 @@ export default function DashboardPage() {
         return category ? category.color : "#000000"
     }
 
+    const totalTasks = tasks.length
+    const completedTasks = tasks.filter((t) => t.completed).length
+
     return (
         <div className="flex min-h-screen flex-col bg-background">
             <header className="border-b border-border">
@@ -186,11 +190,14 @@ export default function DashboardPage() {
                             </TabsList>
                             <TabsContent value="tasks">
                                 <Card className="border border-border h-[calc(100vh-157px)] flex flex-col">
-                                    <CardHeader className="sticky top-0 bg-background z-10">
-                                        <CardTitle className="text-xl">Minhas Tarefas</CardTitle>
-                                        <CardDescription className="text-sm text-muted-foreground">
-                                            Gerencie suas tarefas diárias e acompanhe seu progresso.
-                                        </CardDescription>
+                                    <CardHeader className="sticky top-0 bg-background z-10 flex flex-row items-start justify-between">
+                                        <div>
+                                            <CardTitle className="text-xl">Minhas Tarefas</CardTitle>
+                                            <CardDescription className="text-sm text-muted-foreground">
+                                                Gerencie suas tarefas diárias e acompanhe seu progresso.
+                                            </CardDescription>
+                                        </div>
+                                        <CircularProgress  value={completedTasks} total={totalTasks} size={60} />
                                     </CardHeader>
 
                                     {tasks.length === 0 ? (
@@ -206,7 +213,7 @@ export default function DashboardPage() {
                                             </div>
                                         </CardContent>
                                     ) : (
-                                    <CardContent className=" flex-1 overflow-auto pb-4">
+                                    <CardContent className="flex-1 overflow-auto pb-4">
                                         <div className="space-y-4">
                                             <div className="space-y-2">
                                                 {tasks.map((task) => (
