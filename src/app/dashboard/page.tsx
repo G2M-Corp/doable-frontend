@@ -165,6 +165,199 @@ export default function DashboardPage() {
                         )}
                     </div>
                 </aside>
+                <main className="flex-1 overflow-auto p-4 md:p-6">
+                    <div className="mx-auto max-w-5xl space-y-6">
+                        <Tabs defaultValue="tasks" className="w-full">
+                            <TabsList className="grid w-full grid-cols-2">
+                                <TabsTrigger value="tasks" className="text-sm">
+                                    Tarefas
+                                </TabsTrigger>
+                                <TabsTrigger value="categories" className="text-sm">
+                                    Categorias
+                                </TabsTrigger>
+                            </TabsList>
+                            <TabsContent value="tasks">
+                                <Card className="border border-border h-[calc(100vh-200px)] flex flex-col">
+                                    <CardHeader className="sticky top-0 bg-background z-10">
+                                        <CardTitle className="text-xl">Minhas Tarefas</CardTitle>
+                                        <CardDescription className="text-sm text-muted-foreground">
+                                            Gerencie suas tarefas diárias e acompanhe seu progresso.
+                                        </CardDescription>
+                                    </CardHeader>
+
+                                    {tasks.length === 0 ? (
+                                        <CardContent className="flex flex-col items-center justify-center flex-1 overflow-auto pb-4">
+                                            <div className="space-y-4">
+                                                <div className="flex flex-col items-center justify-center py-8 text-center">
+                                                    <CheckCircle2 className="h-12 w-12 text-muted-foreground/50" />
+                                                    <h3 className="mt-2 text-lg font-medium">Nenhuma tarefa</h3>
+                                                    <p className="text-sm text-muted-foreground">
+                                                        Adicione sua primeira tarefa usando o campo abaixo.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </CardContent>
+                                    ) : (
+                                    <CardContent className=" flex-1 overflow-auto pb-4">
+                                        <div className="space-y-4">
+                                            <div className="space-y-2">
+                                                {tasks.map((task) => (
+                                                    <div
+                                                        key={task.id}
+                                                        className={`flex items-center justify-between rounded-lg border border-border p-3 ${task.completed ? "bg-muted/50" : ""}`}>
+                                                        <div className="flex items-center gap-3">
+                                                            <Checkbox
+                                                                checked={task.completed}
+                                                                onCheckedChange={() => toggleTaskCompletion(task.id)}
+                                                                id={`task-${task.id}`}
+                                                            />
+                                                            <div className="flex flex-col">
+                                                                <label
+                                                                    htmlFor={`task-${task.id}`}
+                                                                    className={`text-sm font-medium ${task.completed ? "line-through text-muted-foreground" : ""
+                                                                        }`}
+                                                                >
+                                                                    {task.title}
+                                                                </label>
+                                                                {task.category && (
+                                                                    <Badge
+                                                                        variant="outline"
+                                                                        className={`mt-1 w-fit text-xs ${getCategoryBadgeClass(task.category)}`}
+                                                                    >
+                                                                        {task.category}
+                                                                    </Badge>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            onClick={() => deleteTask(task.id)}
+                                                            className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                                                        >
+                                                            <Trash2 className="h-4 w-4" />
+                                                            <span className="sr-only">Excluir tarefa</span>
+                                                        </Button>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </CardContent>
+                                                )}
+                                    <CardFooter className="sticky bottom-0 bg-background border-t border-border pt-4">
+                                        <form
+                                            onSubmit={(e) => {
+                                                e.preventDefault()
+                                                addTask()
+                                            }}
+                                            className="flex w-full items-center gap-2"
+                                        >
+                                            <Input
+                                                placeholder="Adicionar nova tarefa..."
+                                                value={newTask}
+                                                onChange={(e) => setNewTask(e.target.value)}
+                                                className="flex-1 text-sm"
+                                            />
+                                            <Select value={newTaskCategory} onValueChange={setNewTaskCategory}>
+                                                <SelectTrigger className="w-[180px]">
+                                                    <SelectValue placeholder="Categoria" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="none">Sem categoria</SelectItem>
+                                                    {categories.map((category) => (
+                                                        <SelectItem key={category.id} value={category.name} className="capitalize">
+                                                            {category.name}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                            <Button type="submit" size="sm">
+                                                Adicionar
+                                            </Button>
+                                        </form>
+                                    </CardFooter>
+                                </Card>
+                            </TabsContent>
+                            <TabsContent value="categories">
+                                <Card className="border border-border h-[calc(100vh-200px)] flex flex-col">
+                                    <CardHeader className="sticky top-0 bg-background z-10 pb-3">
+                                        <CardTitle className="text-xl">Categorias</CardTitle>
+                                        <CardDescription className="text-sm text-muted-foreground">
+                                            Crie e gerencie categorias para organizar suas tarefas.
+                                        </CardDescription>
+                                    </CardHeader>
+                                    <CardContent className="flex-1 overflow-auto pb-4">
+                                        <div className="space-y-4">
+                                            {categories.length === 0 ? (
+                                                <div className="flex flex-col items-center justify-center py-8 text-center">
+                                                    <Circle className="h-12 w-12 text-muted-foreground/50" />
+                                                    <h3 className="mt-2 text-lg font-medium">Nenhuma categoria</h3>
+                                                    <p className="text-sm text-muted-foreground">
+                                                        Adicione sua primeira categoria usando o formulário abaixo.
+                                                    </p>
+                                                </div>
+                                            ) : (
+                                                <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                                                    {categories.map((category) => (
+                                                        <div
+                                                            key={category.id}
+                                                            className="flex items-center justify-between rounded-lg border border-border p-3"
+                                                        >
+                                                            <div className="flex items-center gap-3">
+                                                                <div className={`h-4 w-4 rounded-full ${category.color}`} />
+                                                                <span className="text-sm font-medium capitalize">{category.name}</span>
+                                                            </div>
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                onClick={() => deleteCategory(category.id)}
+                                                                className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                                                            >
+                                                                <Trash2 className="h-4 w-4" />
+                                                                <span className="sr-only">Excluir categoria</span>
+                                                            </Button>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </CardContent>
+                                    <CardFooter className="sticky bottom-0 bg-background border-t border-border pt-4">
+                                        <form
+                                            onSubmit={(e) => {
+                                                e.preventDefault()
+                                                addCategory()
+                                            }}
+                                            className="grid w-full gap-4 sm:grid-cols-[1fr_auto_auto]"
+                                        >
+                                            <Input
+                                                placeholder="Nome da categoria..."
+                                                value={newCategory}
+                                                onChange={(e) => setNewCategory(e.target.value)}
+                                                className="text-sm"
+                                            />
+                                            <div className="flex items-center gap-2">
+                                                <Label htmlFor="color" className="sr-only">
+                                                    Cor
+                                                </Label>
+                                                <Input
+                                                    type="color"
+                                                    id="color"
+                                                    value={newCategoryColor}
+                                                    onChange={(e) => setNewCategoryColor(e.target.value)}
+                                                    className="h-10 w-10 cursor-pointer p-1"
+                                                />
+                                            </div>
+                                            <Button type="submit" size="default">
+                                                Adicionar
+                                            </Button>
+                                        </form>
+                                    </CardFooter>
+                                </Card>
+                            </TabsContent>
+                        </Tabs>
+                    </div>
+                </main>
             </div>
         </div>
     );
