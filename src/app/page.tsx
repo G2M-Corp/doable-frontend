@@ -510,8 +510,8 @@ export default function LandingPage() {
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  "O Doable revolucionou a forma como organizo meus projetos. Consigo acompanhar todas as tarefas e
-                  nunca mais perco prazos importantes."
+                  &quot;O Doable revolucionou a forma como organizo meus projetos. Consigo acompanhar todas as tarefas e
+                  nunca mais perco prazos importantes.&quot;
                 </p>
               </div>
               <div className="rounded-lg bg-muted p-6">
@@ -525,8 +525,8 @@ export default function LandingPage() {
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  "Como gerente de equipe, o Doable me ajuda a delegar tarefas e acompanhar o progresso de todos os
-                  membros em tempo real. Indispensável!"
+                  &quot;Como gerente de equipe, o Doable me ajuda a delegar tarefas e acompanhar o progresso de todos os
+                  membros em tempo real. Indispensável!&quot;
                 </p>
               </div>
               <div className="rounded-lg bg-muted p-6">
@@ -540,8 +540,8 @@ export default function LandingPage() {
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  "Uso o Doable para organizar meus estudos e trabalhos acadêmicos. A interface é intuitiva e me ajuda a
-                  manter o foco no que realmente importa."
+                  &quot;Uso o Doable para organizar meus estudos e trabalhos acadêmicos. A interface é intuitiva e me ajuda a
+                  manter o foco no que realmente importa.&quot;
                 </p>
               </div>
             </div>
