@@ -47,20 +47,6 @@ export default function DashboardPage() {
     const [newCategory, setNewCategory] = useState("")
     const [newCategoryColor, setNewCategoryColor] = useState("#4f46e5")
 
-    const addTask = () => {
-        if (newTask.trim() !== "") {
-            const task: Task = {
-                id: Date.now().toString(),
-                title: newTask,
-                completed: false,
-                category: newTaskCategory || undefined,
-            }
-            setTasks([...tasks, task])
-            setNewTask("")
-            setNewTaskCategory("")
-        }
-    }
-
     const toggleTaskCompletion = (id: string) => {
         setTasks(tasks.map((task) => (task.id === id ? { ...task, completed: !task.completed } : task)))
     }
@@ -76,9 +62,23 @@ export default function DashboardPage() {
                 name: newCategory.toLowerCase(),
                 color: newCategoryColor,
             }
-            setCategories([...categories, category])
+            setCategories([category, ...categories])
             setNewCategory("")
             setNewCategoryColor("#4f46e5")
+        }
+    }
+
+    const addTask = () => {
+        if (newTask.trim() !== "") {
+            const task: Task = {
+                id: Date.now().toString(),
+                title: newTask,
+                completed: false,
+                category: newTaskCategory || undefined,
+            }
+            setTasks([task, ...tasks])
+            setNewTask("")
+            setNewTaskCategory("")
         }
     }
 
