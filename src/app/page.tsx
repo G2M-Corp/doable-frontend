@@ -25,9 +25,9 @@ export default function LandingPage() {
           </div>
         </header>
 
-        <main className="flex-1">
-          <section className="w-full py-20 text-center">
-            <div className="mx-auto max-w-2xl px-4 md:px-6">
+        <main className="flex-1 flex flex-col">
+          <section className="w-full flex flex-1 items-center justify-center text-center px-4">
+            <div className="mx-auto max-w-2xl md:px-6">
               <div className="inline-flex items-center gap-2 rounded-full bg-muted px-3 py-1 text-sm font-medium">
                 <Rocket className="h-4 w-4" />
                 <span>Organize suas tarefas</span>
