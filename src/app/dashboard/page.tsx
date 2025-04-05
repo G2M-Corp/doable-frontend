@@ -11,7 +11,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Rocket, Trash2, CheckCircle2, Circle, Info } from "lucide-react"
+import { Rocket, Trash2, CheckCircle2, Circle } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { toast } from "sonner";
 import { CircularProgress } from "@/components/ui/circular-progress"
@@ -56,6 +56,7 @@ export default function DashboardPage() {
 
         refetchTasks()
         fetchCategories(token)
+        // eslint-disable-next-line
     }, [])
 
     const fetchCategories = async (token: string) => {
@@ -65,6 +66,7 @@ export default function DashboardPage() {
             })
             if (!res.ok) throw new Error("Erro ao buscar categorias")
             const data = await res.json()
+            // eslint-disable-next-line
             const formatted = (Array.isArray(data.results) ? data.results : data).map((cat: any) => ({
                 id: cat.id.toString(),
                 name: cat.nome,
