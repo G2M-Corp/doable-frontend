@@ -20,9 +20,15 @@ import { API_BASE_URL } from "../../lib/baseUrls";
 
 type Task = {
     id: string
-    title: string
-    completed: boolean
-    category?: string
+    titulo: string
+    descricao: string
+    status: "pendente" | "concluida"
+    data_limite?: string
+    categoria?: {
+        id: string
+        nome: string
+        cor: string
+    }[]
 }
 
 type Category = {
@@ -33,206 +39,200 @@ type Category = {
 
 export default function DashboardPage() {
     const [isLoadingCategories, setIsLoadingCategories] = useState(true)
+    const [isLoadingTasks, setIsLoadingTasks] = useState(true)
     const [isCreatingCategory, setIsCreatingCategory] = useState(false)
+    const [isCreatingTask, setIsCreatingTask] = useState(false)
     const [userData] = useState<{ name: string } | null>(null)
+    const [tasks, setTasks] = useState<Task[]>([])
+    const [categories, setCategories] = useState<Category[]>([])
+    const [newTask, setNewTask] = useState("")
+    const [newTaskCategory, setNewTaskCategory] = useState("")
+    const [newCategory, setNewCategory] = useState("")
+    const [newCategoryColor, setNewCategoryColor] = useState("#4f46e5")
 
     useEffect(() => {
         const token = localStorage.getItem("token")
         if (!token) return
 
-        fetch(`${API_BASE_URL}/api/categorias/`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((res) => {
-                if (!res.ok) throw new Error("Erro ao buscar categorias")
-                return res.json()
-            })
-            .then((data) => {
-                const categorias = Array.isArray(data.results) ? data.results : data
-                
-                // eslint-disable-next-line
-                const formatted = categorias.map((cat: any) => ({
-                    id: cat.id.toString(),
-                    name: cat.nome,
-                    color: cat.cor,
-                }))
-                setCategories(formatted)
-            })
-
-            .catch((err) => {
-                console.error(err)
-                toast("Erro ao carregar categorias.", {
-                    duration: 2000,
-                    style: { backgroundColor: "#f87171", color: "#fff" },
-                })
-            })
-            .finally(() => setIsLoadingCategories(false))
+        refetchTasks()
+        fetchCategories(token)
     }, [])
 
-
-    const getAvatarUsername = (name: string): string => {
-        const parts = name.trim().split(" ")
-        if (parts.length === 1) {
-            return parts[0][0]
-        } else {
-            return `${parts[0][0]}${parts[1][0]}`
-        }
-    }
-
-    const [tasks, setTasks] = useState<Task[]>([
-        { id: "1", title: "Finalizar proposta de projeto", completed: false, category: "trabalho" },
-        { id: "2", title: "Comprar mantimentos", completed: true, category: "pessoal" },
-        { id: "3", title: "Agendar reunião com equipe", completed: false, category: "trabalho" },
-        { id: "4", title: "Pagar contas do mês", completed: false, category: "finanças" },
-        { id: "5", title: "Preparar apresentação", completed: false, category: "trabalho" },
-    ])
-
-    const [newTask, setNewTask] = useState("")
-    const [newTaskCategory, setNewTaskCategory] = useState("")
-
-    const [categories, setCategories] = useState<Category[]>([])
-
-    const [newCategory, setNewCategory] = useState("")
-    const [newCategoryColor, setNewCategoryColor] = useState("#4f46e5")
-
-    // Task
-    const addTask = () => {
-        if (newTask.trim() !== "") {
-            const task: Task = {
-                id: Date.now().toString(),
-                title: newTask,
-                completed: false,
-                category: newTaskCategory || undefined,
-            }
-            setTasks([task, ...tasks])
-            setNewTask("")
-            setNewTaskCategory("")
-        }
-    }
-
-    const deleteTask = (id: string) => {
-        setTasks(tasks.filter((task) => task.id !== id))
-    }
-    
-    const toggleTaskCompletion = (id: string) => {
-        setTasks(tasks.map((task) => (task.id === id ? { ...task, completed: !task.completed } : task)))
-    }
-
-    // Category
-    const addCategory = async () => {
-        if (newCategory.trim() === "") return
-
-        const categoryExists = categories.some(
-            (category) => category.name.toLowerCase() === newCategory.toLowerCase()
-        )
-        if (categoryExists) {
-            toast("Essa categoria já existe!", {
-                duration: 2000,
-                style: { backgroundColor: "#f87171", color: "#fff" },
-                icon: <Info className="h-5 w-5" />,
-            })
-            return
-        }
-
-        const token = localStorage.getItem("token")
-        const randomDescription = Math.random().toString(36).substring(2, 14)
-
-        setIsCreatingCategory(true)
-
+    const fetchCategories = async (token: string) => {
         try {
             const res = await fetch(`${API_BASE_URL}/api/categorias/`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify({
-                    nome: newCategory,
-                    descricao: randomDescription,
-                    cor: newCategoryColor,
-                }),
+                headers: { Authorization: `Bearer ${token}` },
             })
-
-            if (!res.ok) throw new Error("Erro ao criar categoria")
-
-            const created = await res.json()
-
-            const category: Category = {
-                id: created.id.toString(),
-                name: created.nome.toLowerCase(),
-                color: created.cor,
-            }
-
-            setCategories([category, ...categories])
-            setNewCategory("")
-            setNewCategoryColor("#4f46e5")
-
-            toast("Categoria criada com sucesso!", {
-                duration: 2000,
-                style: { backgroundColor: "#4ade80", color: "#000" },
-            })
-        } catch (error) {
-            console.error(error)
-            toast("Erro ao criar categoria!", {
-                duration: 2000,
-                style: { backgroundColor: "#f87171", color: "#fff" },
-            })
-        } finally {
-            setIsCreatingCategory(false)
-        }
-    }
-
-    const deleteCategory = async (id: string) => {
-        const token = localStorage.getItem("token")
-        if (!token) return
-
-        setIsLoadingCategories(true)
-
-        try {
-            const res = await fetch(`${API_BASE_URL}/api/categorias/${id}/`, {
-                method: "DELETE",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
-
-            if (!res.ok) throw new Error("Erro ao deletar categoria")
-
-            setCategories(categories.filter((category) => category.id !== id))
-            setTasks(
-                tasks.map((task) => {
-                    const category = categories.find((c) => c.id === id)
-                    if (category && task.category === category.name) {
-                        return { ...task, category: undefined }
-                    }
-                    return task
-                }),
-            )
-
-            toast("Categoria deletada com sucesso!", {
-                duration: 2000,
-                style: { backgroundColor: "#4ade80", color: "#000" },
-            })
-        } catch (error) {
-            console.error(error)
-            toast("Erro ao deletar categoria.", {
-                duration: 2000,
-                style: { backgroundColor: "#f87171", color: "#fff" },
-            })
+            if (!res.ok) throw new Error("Erro ao buscar categorias")
+            const data = await res.json()
+            const formatted = (Array.isArray(data.results) ? data.results : data).map((cat: any) => ({
+                id: cat.id.toString(),
+                name: cat.nome,
+                color: cat.cor,
+            }))
+            setCategories(formatted)
+        } catch (err) {
+            console.error(err)
+            showToast("Erro ao carregar categorias.", "error")
         } finally {
             setIsLoadingCategories(false)
         }
     }
 
-    const getHexColorByCategoryName = (categoryName: string) => {
-        const category = categories.find((cat) => cat.name === categoryName)
-        return category ? category.color : "#000000"
+    const refetchTasks = async () => {
+        const token = localStorage.getItem("token")
+        if (!token) return
+
+        setIsLoadingTasks(true)
+        try {
+            const res = await fetch(`${API_BASE_URL}/api/tarefas/`, {
+                headers: { Authorization: `Bearer ${token}` },
+            })
+            const data = await res.json()
+            if (Array.isArray(data.results)) setTasks(data.results)
+        } catch (err) {
+            console.error(err)
+            showToast("Erro ao carregar tarefas.", "error")
+        } finally {
+            setIsLoadingTasks(false)
+        }
+    }
+
+    const showToast = (message: string, type: "success" | "error") => {
+        toast(message, {
+            duration: 2000,
+            style: {
+                backgroundColor: type === "success" ? "#4ade80" : "#f87171",
+                color: type === "success" ? "#000" : "#fff",
+            },
+        })
+    }
+
+    const handleTaskAction = async (action: "add" | "delete" | "toggle", task?: Task, newStatus?: "pendente" | "concluida") => {
+        const token = localStorage.getItem("token")
+        if (!token) return
+
+        try {
+            if (action === "add" && newTask.trim()) {
+                const categoryObj = categories.find((cat) => cat.name === newTaskCategory)
+                setIsCreatingTask(true)
+                await fetch(`${API_BASE_URL}/api/tarefas/`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({
+                        titulo: newTask,
+                        descricao: newTask,
+                        status: "pendente",
+                        data_limite: new Date().toISOString(),
+                        categoria: categoryObj ? [parseInt(categoryObj.id)] : [],
+                    }),
+                })
+                showToast("Tarefa criada com sucesso!", "success")
+                setNewTask("")
+                setNewTaskCategory("")
+                await refetchTasks()
+            } else if (action === "delete" && task) {
+                await fetch(`${API_BASE_URL}/api/tarefas/${task.id}/`, {
+                    method: "DELETE",
+                    headers: { Authorization: `Bearer ${token}` },
+                })
+                showToast("Tarefa deletada com sucesso!", "success")
+                await refetchTasks()
+            } else if (action === "toggle" && task && newStatus) {
+                await fetch(`${API_BASE_URL}/api/tarefas/${task.id}/`, {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({ status: newStatus }),
+                })
+                setTasks((prev) =>
+                    prev.map((t) => (t.id === task.id ? { ...t, status: newStatus as "pendente" | "concluida" } : t)),
+                )
+            }
+        } catch (err) {
+            console.error(err)
+            showToast("Erro ao realizar ação na tarefa.", "error")
+        } finally {
+            if (action === "add") setIsCreatingTask(false)
+        }
+    }
+
+    const handleCategoryAction = async (action: "add" | "delete", category?: Category) => {
+        const token = localStorage.getItem("token")
+        if (!token) return
+
+        try {
+            if (action === "add" && newCategory.trim()) {
+                if (categories.some((cat) => cat.name.toLowerCase() === newCategory.toLowerCase())) {
+                    showToast("Essa categoria já existe!", "error")
+                    return
+                }
+                setIsCreatingCategory(true)
+                const res = await fetch(`${API_BASE_URL}/api/categorias/`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({
+                        nome: newCategory,
+                        descricao: Math.random().toString(36).substring(2, 14),
+                        cor: newCategoryColor,
+                    }),
+                })
+                const created = await res.json()
+                setCategories([{ id: created.id.toString(), name: created.nome.toLowerCase(), color: created.cor }, ...categories])
+                setNewCategory("")
+                setNewCategoryColor("#4f46e5")
+                showToast("Categoria criada com sucesso!", "success")
+            } else if (action === "delete" && category) {
+                await fetch(`${API_BASE_URL}/api/categorias/${category.id}/`, {
+                    method: "DELETE",
+                    headers: { Authorization: `Bearer ${token}` },
+                })
+                setCategories(categories.filter((cat) => cat.id !== category.id))
+                setTasks((prev) =>
+                    prev.map((task) => ({
+                        ...task,
+                        categoria: task.categoria?.filter((cat) => cat.id !== category.id),
+                    })),
+                )
+                showToast("Categoria deletada com sucesso!", "success")
+            }
+        } catch (err) {
+            console.error(err)
+            showToast("Erro ao realizar ação na categoria.", "error")
+        } finally {
+            if (action === "add") setIsCreatingCategory(false)
+        }
+    }
+
+    const getBadgeByTaskCategory = (categoria?: Task["categoria"]) => {
+        if (!categoria || categoria.length === 0) return null
+        return (
+            <Badge
+                variant="outline"
+                className="mt-1 w-fit text-xs"
+                style={{ backgroundColor: categoria[0].cor }}
+            >
+                {categoria[0].nome}
+            </Badge>
+        )
     }
 
     const totalTasks = tasks.length
-    const completedTasks = tasks.filter((t) => t.completed).length
+    const completedTasks = tasks.filter((t) => t.status === "concluida").length
+
+    const getAvatarUsername = (name: string): string => {
+        const parts = name.trim().split(" ")
+        return parts.length === 1 ? parts[0][0] : `${parts[0][0]}${parts[1][0]}`
+    }
+
 
     return (
         <div className="flex min-h-screen flex-col bg-background">
@@ -327,19 +327,28 @@ export default function DashboardPage() {
                                         <CircularProgress  value={completedTasks} total={totalTasks} size={60} />
                                     </CardHeader>
 
-                                    {tasks.length === 0 ? (
-                                        <CardContent className="flex flex-col items-center justify-center flex-1 overflow-auto pb-4">
-                                            <div className="space-y-4">
-                                                <div className="flex flex-col items-center justify-center py-8 text-center">
-                                                    <CheckCircle2 className="h-12 w-12 text-muted-foreground/50" />
-                                                    <h3 className="mt-2 text-lg font-medium">Nenhuma tarefa</h3>
-                                                    <p className="text-sm text-muted-foreground">
-                                                        Adicione sua primeira tarefa usando o campo abaixo.
-                                                    </p>
+                                        {isLoadingTasks ? (
+                                            <CardContent className="flex flex-col items-center justify-center flex-1 overflow-auto pb-4">
+                                                <div className="space-y-4">
+                                                    <div className="flex flex-col items-center justify-center py-8 text-center">
+                                                        <span className="animate-spin rounded-full h-8 w-8 border-2 border-muted-foreground border-t-transparent" />
+                                                        <p className="mt-4 text-sm text-muted-foreground">Carregando tarefas...</p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </CardContent>
-                                    ) : (
+                                            </CardContent>
+                                        ) : tasks.length === 0 ? (
+                                            <CardContent className="flex flex-col items-center justify-center flex-1 overflow-auto pb-4">
+                                                <div className="space-y-4">
+                                                    <div className="flex flex-col items-center justify-center py-8 text-center">
+                                                        <CheckCircle2 className="h-12 w-12 text-muted-foreground/50" />
+                                                        <h3 className="mt-2 text-lg font-medium">Nenhuma tarefa</h3>
+                                                        <p className="text-sm text-muted-foreground">
+                                                            Adicione sua primeira tarefa usando o campo abaixo.
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </CardContent>
+                                        ) : (
                                     <CardContent className="flex-1 overflow-auto pb-4">
                                         <div className="space-y-4">
                                             <div className="space-y-2">
@@ -349,37 +358,37 @@ export default function DashboardPage() {
                                                         initial={{ opacity: 0, y: 10 }}
                                                         animate={{ opacity: 1, y: 0 }}
                                                         transition={{ duration: 0.3 }}
-                                                        className={`flex items-center justify-between rounded-lg border border-border p-3 ${task.completed ? "bg-muted/50" : ""}`}
+                                                        className={`flex items-center justify-between rounded-lg border border-border p-3 ${task.status === "concluida" ? "bg-muted/50" : ""}`}
                                                     >
                                                         <div className="flex items-center gap-3">
                                                             <Checkbox
-                                                                checked={task.completed}
-                                                                onCheckedChange={() => toggleTaskCompletion(task.id)}
+                                                                checked={task.status === "concluida"}
+                                                                onCheckedChange={() =>
+                                                                    handleTaskAction(
+                                                                        "toggle",
+                                                                        task,
+                                                                        task.status === "concluida" ? "pendente" : "concluida"
+                                                                    )
+                                                                }
                                                                 id={`task-${task.id}`}
                                                             />
                                                             <div className="flex flex-col">
                                                                 <label
                                                                     htmlFor={`task-${task.id}`}
-                                                                    className={`text-sm font-medium ${task.completed ? "line-through text-muted-foreground" : ""
+                                                                    className={`text-sm font-medium ${task.status === "concluida" ? "line-through text-muted-foreground" : ""
                                                                         }`}
                                                                 >
-                                                                    {task.title}
+                                                                    {task.titulo}
                                                                 </label>
-                                                                {task.category && (
-                                                                    <Badge
-                                                                        variant="outline"
-                                                                        className={`mt-1 w-fit text-xs}`}
-                                                                        style={{ backgroundColor: getHexColorByCategoryName(task.category) }}
-                                                                    >
-                                                                        {task.category}
-                                                                    </Badge>
+                                                                {task.categoria && task.categoria.length > 0 && (
+                                                                    getBadgeByTaskCategory(task.categoria)
                                                                 )}
                                                             </div>
                                                         </div>
                                                         <Button
                                                             variant="ghost"
                                                             size="icon"
-                                                            onClick={() => deleteTask(task.id)}
+                                                            onClick={() => handleTaskAction("delete", task)}
                                                             className="h-8 w-8 text-muted-foreground hover:text-destructive"
                                                         >
                                                             <Trash2 className="h-4 w-4" />
@@ -394,7 +403,7 @@ export default function DashboardPage() {
                                         <form
                                             onSubmit={(e) => {
                                                 e.preventDefault()
-                                                addTask()
+                                                handleTaskAction("add")
                                             }}
                                             className="flex w-full items-center gap-2"
                                         >
@@ -418,8 +427,8 @@ export default function DashboardPage() {
                                                 </SelectContent>
                                             </Select>
                                             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                                                <Button type="submit" size="default">
-                                                    Adicionar
+                                                <Button type="submit" size="default" disabled={isCreatingTask}>
+                                                    {isCreatingTask ? "Adicionando..." : "Adicionar"}
                                                 </Button>
                                             </motion.div>
                                         </form>
@@ -469,7 +478,7 @@ export default function DashboardPage() {
                                                             <Button
                                                                 variant="ghost"
                                                                 size="icon"
-                                                                onClick={() => deleteCategory(category.id)}
+                                                                onClick={() => handleCategoryAction("delete", category)}
                                                                 className="h-8 w-8 text-muted-foreground hover:text-destructive"
                                                             >
                                                                 <Trash2 className="h-4 w-4" />
@@ -484,7 +493,7 @@ export default function DashboardPage() {
                                         <form
                                             onSubmit={(e) => {
                                                 e.preventDefault()
-                                                addCategory()
+                                                handleCategoryAction("add")
                                             }}
                                             className="grid w-full gap-4 sm:grid-cols-[1fr_auto_auto]"
                                         >
@@ -522,5 +531,4 @@ export default function DashboardPage() {
             </div>
         </div>
     );
-
 }
