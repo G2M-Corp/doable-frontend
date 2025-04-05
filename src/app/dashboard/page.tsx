@@ -11,7 +11,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Rocket, Trash2, CheckCircle2, Circle } from "lucide-react"
+import { Rocket, Trash2, CheckCircle2, Circle, Info } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { toast } from "sonner";
 import { CircularProgress } from "@/components/ui/circular-progress"
@@ -42,7 +42,7 @@ export default function DashboardPage() {
     const [isLoadingTasks, setIsLoadingTasks] = useState(true)
     const [isCreatingCategory, setIsCreatingCategory] = useState(false)
     const [isCreatingTask, setIsCreatingTask] = useState(false)
-    const [userData] = useState<{ name: string } | null>(null)
+    const [userData, setUserData] = useState<{ name: string } | null>(null)
     const [tasks, setTasks] = useState<Task[]>([])
     const [categories, setCategories] = useState<Category[]>([])
     const [newTask, setNewTask] = useState("")
@@ -52,7 +52,49 @@ export default function DashboardPage() {
 
     useEffect(() => {
         const token = localStorage.getItem("token")
-        if (!token) return
+        if (!token) {
+            toast("Você precisa estar logado para acessar essa página.", {
+                duration: 2000,
+                style: {
+                    backgroundColor: "#f87171",
+                    color: "#fff",
+                },
+                icon: <Info className="h-5 w-5" />,
+            })
+            window.location.href = "/login"
+            return
+        }
+
+        try {
+            const payloadBase64 = token.split('.')[1]
+            const decodedPayload = JSON.parse(atob(payloadBase64))
+            const userId = decodedPayload.user_id
+
+            fetch(`${API_BASE_URL}/api/usuarios/${userId}/`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+                .then((res) => {
+                    if (!res.ok) throw new Error("Erro ao buscar usuário")
+                    return res.json()
+                })
+                .then((data) => {
+                    setUserData(data)
+                })
+                .catch((err) => {
+                    console.error(err)
+                    toast("Erro ao carregar dados do usuário.", {
+                        duration: 2000,
+                        style: {
+                            backgroundColor: "#f87171",
+                            color: "#fff",
+                        },
+                    })
+                })
+        } catch (e) {
+            console.error("Erro ao decodificar o token:", e)
+        }
 
         refetchTasks()
         fetchCategories(token)
@@ -332,7 +374,6 @@ export default function DashboardPage() {
         const parts = name.trim().split(" ")
         return parts.length === 1 ? parts[0][0] : `${parts[0][0]}${parts[1][0]}`
     }
-
 
     return (
         <div className="flex min-h-screen flex-col bg-background">
