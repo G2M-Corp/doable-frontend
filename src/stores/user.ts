@@ -5,13 +5,12 @@ type User = {
     name: string;
     email: string;
     accessToken: string;
-    imagem_attachment_key?: string;
 } | null;
 
 type UserStore = {
     user: User;
     login: (email: string, password: string) => Promise<boolean>;
-    register: (name: string, email: string, password: string, imagem_attachment_key?: string) => Promise<boolean>;
+    register: (name: string, email: string, password: string) => Promise<boolean>;
     logout: () => void;
 };
 
@@ -19,7 +18,7 @@ export const userStore = create<UserStore>((set) => ({
     user: null,
 
     login: async (email, password) => {
-        const res = await fetch("http://localhost:19003/token/", {
+        const res = await fetch("https://doable-backend-dev.onrender.com/token/", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password }),
@@ -34,7 +33,6 @@ export const userStore = create<UserStore>((set) => ({
                 name: data.name,
                 email: data.email,
                 accessToken: data.access,
-                imagem_attachment_key: data.imagem_attachment_key
             },
         });
 
@@ -42,14 +40,10 @@ export const userStore = create<UserStore>((set) => ({
         return true;
     },
 
-    register: async (name, email, password, imagem_attachment_key) => {
+    register: async (name, email, password) => {
         const userData: Record<string, any> = { name, email, password };
 
-        if (imagem_attachment_key) {
-            userData.imagem_attachment_key = imagem_attachment_key;
-        }
-
-        const res = await fetch("http://localhost:19003/api/usuarios/", {
+        const res = await fetch("https://doable-backend-dev.onrender.com/api/usuarios/", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(userData),
