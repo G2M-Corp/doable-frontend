@@ -1,38 +1,54 @@
-"use client"; 
-import { useState } from "react"
-import { userStore } from "@/stores/user"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Rocket } from "lucide-react"
+"use client";
+
+import { useState } from "react";
+import { userStore } from "@/stores/user";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Rocket, Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import AuthRedirect from "@/components/AuthRedirect";
 
 export default function SignupPage() {
-    const { register } = userStore()
-    const router = useRouter()
-    const [name, setName] = useState("")
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const [confirmPassword, setConfirmPassword] = useState("")
+    const { register } = userStore();
+    const router = useRouter();
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
+        e.preventDefault();
+
         if (password !== confirmPassword) {
-            alert("As senhas não coincidem!")
-            return
+            toast.error("As senhas não coincidem!");
+            return;
         }
 
-        const success = await register(name, email, password)
-        if (success) {
-            router.push("/login")
-        } else {
-            alert("Erro ao cadastrar.")
+        setIsLoading(true);
+
+        try {
+            const success = await register(name, email, password);
+            if (success) {
+                toast.success("Conta criada com sucesso!");
+                router.push("/login");
+            } else {
+                toast.error("Erro ao cadastrar. Tente novamente.");
+            }
+        } catch (error) {
+            toast.error("Erro inesperado. Tente novamente.");
+        } finally {
+            setIsLoading(false);
         }
-    }
+    };
 
     return (
+        <>
+        <AuthRedirect />
         <div className="min-h-screen flex flex-col">
             <div className="flex-1 flex items-center justify-center p-4">
                 <div className="w-full max-w-md space-y-8">
@@ -112,8 +128,15 @@ export default function SignupPage() {
                                 </div>
                             </div>
                             <div>
-                                <Button type="submit" className="w-full">
-                                    Criar Conta
+                                <Button type="submit" className="w-full" disabled={isLoading}>
+                                    {isLoading ? (
+                                        <>
+                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                            Criando...
+                                        </>
+                                    ) : (
+                                        "Criar Conta"
+                                    )}
                                 </Button>
                             </div>
                         </form>
@@ -144,5 +167,6 @@ export default function SignupPage() {
                 </div>
             </footer>
         </div>
-    )
+        </>
+    );
 }

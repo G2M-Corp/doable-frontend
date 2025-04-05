@@ -1,31 +1,46 @@
-"use client"; 
-import { useState } from "react"
-import { userStore } from "@/stores/user"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Rocket } from "lucide-react"
+"use client";
+
+import { useState } from "react";
+import { userStore } from "@/stores/user";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Rocket, Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import AuthRedirect from "@/components/AuthRedirect";
 
 export default function LoginPage() {
-    const { login } = userStore()
-    const router = useRouter()
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
+    const { login } = userStore();
+    const router = useRouter();
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        const success = await login(email, password)
-        if (success) {
-            router.push("/dashboard")
-        } else {
-            alert("Login inválido.")
+        e.preventDefault();
+        setIsLoading(true);
+
+        try {
+            const success = await login(email, password);
+            if (success) {
+                toast.success("Login realizado com sucesso!");
+                router.push("/dashboard");
+            } else {
+                toast.error("Email ou senha inválidos.");
+            }
+        } catch (error) {
+            toast.error("Erro ao fazer login. Tente novamente.");
+        } finally {
+            setIsLoading(false);
         }
-    }
+    };
 
     return (
+        <>
+        <AuthRedirect />
         <div className="min-h-screen flex flex-col">
             <div className="flex-1 flex items-center justify-center p-4">
                 <div className="w-full max-w-md space-y-8">
@@ -80,8 +95,15 @@ export default function LoginPage() {
                                 </div>
                             </div>
                             <div>
-                                <Button type="submit" className="w-full">
-                                    Entrar
+                                <Button type="submit" className="w-full" disabled={isLoading}>
+                                    {isLoading ? (
+                                        <>
+                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                            Entrando...
+                                        </>
+                                    ) : (
+                                        "Entrar"
+                                    )}
                                 </Button>
                             </div>
                         </form>
@@ -112,5 +134,6 @@ export default function LoginPage() {
                 </div>
             </footer>
         </div>
-    )
+        </>
+    );
 }

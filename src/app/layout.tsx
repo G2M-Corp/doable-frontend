@@ -17,11 +17,6 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Doable - To-do List Saas",
   description: "Doable is a to-do list SaaS",
-  // icons: [
-  //   {
-  //     url: "/favicon.ico",
-  //   },
-  // ],
 };
 
 export default function RootLayout({
