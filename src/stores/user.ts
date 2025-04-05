@@ -14,18 +14,35 @@ type UserStore = {
     logout: () => void;
 };
 
+const API_BASE_URL = "https://doable-backend-dev.onrender.com";
+
+const fetchWithJson = async (url: string, method: string, body: Record<string, any>) => {
+    const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+    });
+
+    if (!res.ok) {
+        if (res.status === 401) {
+            console.error("Unauthorized: Invalid credentials or session expired.");
+            localStorage.removeItem("token");
+        } else {
+            console.error(`Request failed: ${res.status} ${res.statusText}`);
+        }
+        return null;
+    }
+
+    return res.json();
+};
+
 export const userStore = create<UserStore>((set) => ({
     user: null,
 
     login: async (email, password) => {
-        const res = await fetch("https://doable-backend-dev.onrender.com/token/", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password }),
-        });
+        const data = await fetchWithJson(`${API_BASE_URL}/token/`, "POST", { email, password });
 
-        if (!res.ok) return false;
-        const data = await res.json();
+        if (!data) return false;
 
         set({
             user: {
@@ -41,15 +58,10 @@ export const userStore = create<UserStore>((set) => ({
     },
 
     register: async (name, email, password) => {
-        const userData: Record<string, any> = { name, email, password };
+        const userData = { name, email, password };
+        const res = await fetchWithJson(`${API_BASE_URL}/api/usuarios/`, "POST", userData);
 
-        const res = await fetch("https://doable-backend-dev.onrender.com/api/usuarios/", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(userData),
-        });
-
-        return res.ok;
+        return !!res;
     },
 
     logout: () => {
