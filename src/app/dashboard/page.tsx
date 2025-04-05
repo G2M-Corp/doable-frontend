@@ -91,7 +91,13 @@ export default function DashboardPage() {
                 headers: { Authorization: `Bearer ${token}` },
             })
             const data = await res.json()
-            if (Array.isArray(data.results)) setTasks(data.results)
+            if (Array.isArray(data.results)) {
+                // eslint-disable-next-line
+                const sorted = data.results.sort((a: any, b: any) =>
+                    new Date(b.data_limite || "").getTime() - new Date(a.data_limite || "").getTime()
+                )
+                setTasks(sorted)
+            }
         } catch (err) {
             console.error(err)
             showToast("Erro ao carregar tarefas.", "error")
@@ -116,45 +122,95 @@ export default function DashboardPage() {
 
         try {
             if (action === "add" && newTask.trim()) {
+                const tempId = Date.now().toString()
                 const categoryObj = categories.find((cat) => cat.name === newTaskCategory)
-                setIsCreatingTask(true)
-                await fetch(`${API_BASE_URL}/api/tarefas/`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
-                    body: JSON.stringify({
-                        titulo: newTask,
-                        descricao: newTask,
-                        status: "pendente",
-                        data_limite: new Date().toISOString(),
-                        categoria: categoryObj ? [parseInt(categoryObj.id)] : [],
-                    }),
-                })
-                showToast("Tarefa criada com sucesso!", "success")
+
+                const optimisticTask: Task = {
+                    id: tempId,
+                    titulo: newTask,
+                    descricao: newTask,
+                    status: "pendente",
+                    data_limite: new Date().toISOString(),
+                    categoria: categoryObj
+                        ? [{
+                            id: categoryObj.id,
+                            nome: categoryObj.name,
+                            cor: categoryObj.color,
+                        }]
+                        : [],
+                }
+
+                setTasks((prev) => [optimisticTask, ...prev])
+
                 setNewTask("")
                 setNewTaskCategory("")
-                await refetchTasks()
+                setIsCreatingTask(true)
+
+                try {
+                    // eslint-disable-next-line
+                    const res = await fetch(`${API_BASE_URL}/api/tarefas/`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`,
+                        },
+                        body: JSON.stringify({
+                            titulo: optimisticTask.titulo,
+                            descricao: optimisticTask.descricao,
+                            status: optimisticTask.status,
+                            data_limite: optimisticTask.data_limite,
+                            categoria: categoryObj ? [parseInt(categoryObj.id)] : [],
+                        }),
+                    })
+
+                    await refetchTasks();
+
+                    showToast("Tarefa criada com sucesso!", "success")
+                } catch (err) {
+                    console.error(err)
+                    showToast("Erro ao criar tarefa.", "error")
+
+                    setTasks((prev) => prev.filter((t) => t.id !== tempId))
+                } finally {
+                    setIsCreatingTask(false)
+                }
             } else if (action === "delete" && task) {
-                await fetch(`${API_BASE_URL}/api/tarefas/${task.id}/`, {
-                    method: "DELETE",
-                    headers: { Authorization: `Bearer ${token}` },
-                })
-                showToast("Tarefa deletada com sucesso!", "success")
-                await refetchTasks()
+                const backupTasks = [...tasks]
+                setTasks((prev) => prev.filter((t) => t.id !== task.id))
+
+                try {
+                    const res = await fetch(`${API_BASE_URL}/api/tarefas/${task.id}/`, {
+                        method: "DELETE",
+                        headers: { Authorization: `Bearer ${token}` },
+                    })
+
+                    if (!res.ok) throw new Error()
+                    showToast("Tarefa deletada com sucesso!", "success")
+                } catch (err) {
+                    console.error(err)
+                    showToast("Erro ao deletar tarefa.", "error")
+                    setTasks(backupTasks)
+                }
             } else if (action === "toggle" && task && newStatus) {
-                await fetch(`${API_BASE_URL}/api/tarefas/${task.id}/`, {
-                    method: "PATCH",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
-                    body: JSON.stringify({ status: newStatus }),
-                })
+                const backupTasks = [...tasks]
                 setTasks((prev) =>
-                    prev.map((t) => (t.id === task.id ? { ...t, status: newStatus as "pendente" | "concluida" } : t)),
+                    prev.map((t) => (t.id === task.id ? { ...t, status: newStatus } : t))
                 )
+
+                try {
+                    await fetch(`${API_BASE_URL}/api/tarefas/${task.id}/`, {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`,
+                        },
+                        body: JSON.stringify({ status: newStatus }),
+                    })
+                } catch (err) {
+                    console.error(err)
+                    showToast("Erro ao atualizar tarefa.", "error")
+                    setTasks(backupTasks)
+                }
             }
         } catch (err) {
             console.error(err)
@@ -174,7 +230,19 @@ export default function DashboardPage() {
                     showToast("Essa categoria já existe!", "error")
                     return
                 }
+
+                const tempId = Date.now().toString()
+                const optimisticCategory: Category = {
+                    id: tempId,
+                    name: newCategory.toLowerCase(),
+                    color: newCategoryColor,
+                }
+
+                setCategories((prev) => [optimisticCategory, ...prev])
+                setNewCategory("")
+                setNewCategoryColor("#4f46e5")
                 setIsCreatingCategory(true)
+
                 const res = await fetch(`${API_BASE_URL}/api/categorias/`, {
                     method: "POST",
                     headers: {
@@ -182,37 +250,67 @@ export default function DashboardPage() {
                         Authorization: `Bearer ${token}`,
                     },
                     body: JSON.stringify({
-                        nome: newCategory,
+                        nome: optimisticCategory.name,
                         descricao: Math.random().toString(36).substring(2, 14),
-                        cor: newCategoryColor,
+                        cor: optimisticCategory.color,
                     }),
                 })
+
                 const created = await res.json()
-                setCategories([{ id: created.id.toString(), name: created.nome.toLowerCase(), color: created.cor }, ...categories])
-                setNewCategory("")
-                setNewCategoryColor("#4f46e5")
+
+                setCategories((prev) =>
+                    prev.map((cat) =>
+                        cat.id === tempId ? { id: created.id.toString(), name: created.nome, color: created.cor } : cat
+                    )
+                )
+
                 showToast("Categoria criada com sucesso!", "success")
-            } else if (action === "delete" && category) {
-                await fetch(`${API_BASE_URL}/api/categorias/${category.id}/`, {
-                    method: "DELETE",
-                    headers: { Authorization: `Bearer ${token}` },
-                })
-                setCategories(categories.filter((cat) => cat.id !== category.id))
+            }
+
+            else if (action === "delete" && category) {
+                // eslint-disable-next-line
+                const backup = [...categories]
+                // eslint-disable-next-line
+                const backupTasks = [...tasks]
+
+                setCategories((prev) => prev.filter((cat) => cat.id !== category.id))
                 setTasks((prev) =>
                     prev.map((task) => ({
                         ...task,
                         categoria: task.categoria?.filter((cat) => cat.id !== category.id),
-                    })),
+                    }))
                 )
+
+                const res = await fetch(`${API_BASE_URL}/api/categorias/${category.id}/`, {
+                    method: "DELETE",
+                    headers: { Authorization: `Bearer ${token}` },
+                })
+
+                if (!res.ok) throw new Error()
+
                 showToast("Categoria deletada com sucesso!", "success")
             }
         } catch (err) {
             console.error(err)
             showToast("Erro ao realizar ação na categoria.", "error")
+
+            if (action === "add") {
+                setCategories((prev) => prev.filter((cat) => cat.name !== newCategory.toLowerCase()))
+            }
+            if (action === "delete" && category) {
+                setCategories((prev) => [...prev, category])
+                setTasks((prev) =>
+                    prev.map((task) => ({
+                        ...task,
+                        categoria: [...(task.categoria || []), { id: category.id, nome: category.name, cor: category.color }],
+                    }))
+                )
+            }
         } finally {
             if (action === "add") setIsCreatingCategory(false)
         }
     }
+
 
     const getBadgeByTaskCategory = (categoria?: Task["categoria"]) => {
         if (!categoria || categoria.length === 0) return null
@@ -220,7 +318,7 @@ export default function DashboardPage() {
             <Badge
                 variant="outline"
                 className="mt-1 w-fit text-xs"
-                style={{ backgroundColor: categoria[0].cor }}
+                style={{ backgroundColor: categoria[0].cor || "#e5e7eb" }}
             >
                 {categoria[0].nome}
             </Badge>
