@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { API_BASE_URL } from "../lib/baseUrls";
 
 type User = {
     id: number;
@@ -13,8 +14,6 @@ type UserStore = {
     register: (name: string, email: string, password: string) => Promise<boolean>;
     logout: () => void;
 };
-
-const API_BASE_URL = "https://doable-backend-dev.onrender.com";
 
 const fetchWithJson = async (url: string, method: string, body: Record<string, any>) => {
     const res = await fetch(url, {
