@@ -120,7 +120,7 @@ export default function LoginPage() {
                 </div>
             </div>
             <footer className="py-6 border-t">
-                <div className="container flex flex-col items-center justify-center gap-2 text-center">
+                <div className="container mx-auto flex flex-col items-center justify-center gap-2 text-center">
                     <p className="text-sm text-muted-foreground">
                         &copy; {new Date().getFullYear()} Doable. Todos os direitos reservados.
                     </p>
