@@ -17,11 +17,11 @@ export default function AuthRedirect() {
                 if (!isExpired) {
                     router.push("/dashboard");
                 }
-            } catch (e) {
+            } catch {
                 localStorage.removeItem("token");
             }
         }
-    }, []);
+    }, [router]);
 
     return null;
 }

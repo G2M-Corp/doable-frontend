@@ -34,7 +34,7 @@ type Category = {
 export default function DashboardPage() {
     const [isLoadingCategories, setIsLoadingCategories] = useState(true)
     const [isCreatingCategory, setIsCreatingCategory] = useState(false)
-    const [userData, setUserData] = useState<any>(null)
+    const [userData] = useState<{ name: string } | null>(null)
 
     useEffect(() => {
         const token = localStorage.getItem("token")
@@ -51,7 +51,8 @@ export default function DashboardPage() {
             })
             .then((data) => {
                 const categorias = Array.isArray(data.results) ? data.results : data
-
+                
+                // eslint-disable-next-line
                 const formatted = categorias.map((cat: any) => ({
                     id: cat.id.toString(),
                     name: cat.nome,

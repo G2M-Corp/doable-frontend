@@ -31,6 +31,7 @@ export default function LoginPage() {
             } else {
                 toast.error("Email ou senha inválidos.");
             }
+            // eslint-disable-next-line
         } catch (error) {
             toast.error("Erro ao fazer login. Tente novamente.");
         } finally {
