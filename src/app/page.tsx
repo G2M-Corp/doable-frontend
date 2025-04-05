@@ -14,26 +14,15 @@ export default function LandingPage() {
             <Rocket className="h-6 w-6 text-primary" />
             <span className="text-xl font-bold">Doable</span>
           </div>
-          <nav className="hidden items-center gap-6 md:flex">
-            <Link href="#recursos" className="text-sm font-medium transition-colors hover:text-primary">
+          <div className="flex items-center gap-4">
+          <Link href="#recursos" className="text-sm font-medium transition-colors hover:text-primary">
               Recursos
             </Link>
-            <Link href="#precos" className="text-sm font-medium transition-colors hover:text-primary">
-              Preços
-            </Link>
-            <Link href="#depoimentos" className="text-sm font-medium transition-colors hover:text-primary">
-              Depoimentos
-            </Link>
-            <Link href="#faq" className="text-sm font-medium transition-colors hover:text-primary">
-              FAQ
-            </Link>
-          </nav>
-          <div className="flex items-center gap-4">
             <Link href="/login" className="text-sm font-medium transition-colors hover:text-primary">
               Entrar
             </Link>
             <Button asChild size="sm">
-              <Link href="/signup">Começar Grátis</Link>
+              <Link href="/signup">Começar</Link>
             </Button>
           </div>
         </div>
@@ -55,13 +44,13 @@ export default function LandingPage() {
             </p>
             <div className="mt-8">
               <Button size="lg" asChild>
-                <Link href="/signup">Experimente Grátis</Link>
+                <Link href="/signup">Experimente</Link>
               </Button>
             </div>
           </div>
         </section>
 
-        <section className="w-full bg-background py-12 md:py-24" id="recursos">
+        <section className="w-full bg-muted py-12 md:py-24" id="recursos">
           <div className="mx-auto w-full max-w-5xl px-4 md:px-6">
             <div className="flex flex-col items-center text-center">
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
@@ -229,369 +218,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="w-full bg-background py-12 md:py-24" id="precos">
-          <div className="mx-auto w-full max-w-5xl px-4 md:px-6">
-            <div className="flex flex-col items-center text-center">
-              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
-                Planos simples e transparentes
-              </h2>
-              <p className="mx-auto mt-4 max-w-[85%] text-base text-muted-foreground sm:text-lg">
-                Escolha o plano ideal para suas necessidades e comece a organizar sua vida hoje mesmo.
-              </p>
-            </div>
-
-            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              <div className="flex h-full flex-col justify-between rounded-lg border border-border bg-background p-6 shadow-sm">
-                <div>
-                  <h3 className="text-2xl font-bold">Gratuito</h3>
-                  <div className="mt-4 text-4xl font-bold">
-                    R$ 0<span className="text-base font-normal text-muted-foreground">/mês</span>
-                  </div>
-                  <p className="mt-2 text-sm text-muted-foreground">Perfeito para começar a organizar suas tarefas.</p>
-                  <ul className="mt-4 space-y-2">
-                    <li className="flex items-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="mr-2 h-4 w-4 text-primary"
-                      >
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
-                      <span className="text-sm">Até 3 listas</span>
-                    </li>
-                    <li className="flex items-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="mr-2 h-4 w-4 text-primary"
-                      >
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
-                      <span className="text-sm">Até 30 tarefas</span>
-                    </li>
-                    <li className="flex items-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="mr-2 h-4 w-4 text-primary"
-                      >
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
-                      <span className="text-sm">Lembretes básicos</span>
-                    </li>
-                  </ul>
-                </div>
-                <Button className="mt-6 w-full" variant="outline">
-                  Começar Grátis
-                </Button>
-              </div>
-              <div className="relative flex h-full flex-col justify-between rounded-lg border border-border bg-background p-6 shadow-sm">
-                <div className="absolute -top-4 left-0 right-0 mx-auto w-fit rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground">
-                  Popular
-                </div>
-                <div>
-                  <h3 className="text-2xl font-bold">Pessoal</h3>
-                  <div className="mt-4 text-4xl font-bold">
-                    R$ 19<span className="text-base font-normal text-muted-foreground">/mês</span>
-                  </div>
-                  <p className="mt-2 text-sm text-muted-foreground">Ideal para uso pessoal com recursos avançados.</p>
-                  <ul className="mt-4 space-y-2">
-                    <li className="flex items-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="mr-2 h-4 w-4 text-primary"
-                      >
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
-                      <span className="text-sm">Listas ilimitadas</span>
-                    </li>
-                    <li className="flex items-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="mr-2 h-4 w-4 text-primary"
-                      >
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
-                      <span className="text-sm">Tarefas ilimitadas</span>
-                    </li>
-                    <li className="flex items-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="mr-2 h-4 w-4 text-primary"
-                      >
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
-                      <span className="text-sm">Lembretes avançados</span>
-                    </li>
-                    <li className="flex items-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="mr-2 h-4 w-4 text-primary"
-                      >
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
-                      <span className="text-sm">Sincronização em todos dispositivos</span>
-                    </li>
-                  </ul>
-                </div>
-                <Button className="mt-6 w-full">Assinar Agora</Button>
-              </div>
-              <div className="flex h-full flex-col justify-between rounded-lg border border-border bg-background p-6 shadow-sm">
-                <div>
-                  <h3 className="text-2xl font-bold">Equipe</h3>
-                  <div className="mt-4 text-4xl font-bold">
-                    R$ 49<span className="text-base font-normal text-muted-foreground">/mês</span>
-                  </div>
-                  <p className="mt-2 text-sm text-muted-foreground">Para equipes que precisam colaborar em projetos.</p>
-                  <ul className="mt-4 space-y-2">
-                    <li className="flex items-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="mr-2 h-4 w-4 text-primary"
-                      >
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
-                      <span className="text-sm">Tudo do plano Pessoal</span>
-                    </li>
-                    <li className="flex items-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="mr-2 h-4 w-4 text-primary"
-                      >
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
-                      <span className="text-sm">Até 10 membros</span>
-                    </li>
-                    <li className="flex items-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="mr-2 h-4 w-4 text-primary"
-                      >
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
-                      <span className="text-sm">Colaboração em tempo real</span>
-                    </li>
-                    <li className="flex items-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="mr-2 h-4 w-4 text-primary"
-                      >
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
-                      <span className="text-sm">Controle de permissões</span>
-                    </li>
-                    <li className="flex items-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="mr-2 h-4 w-4 text-primary"
-                      >
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
-                      <span className="text-sm">Relatórios avançados</span>
-                    </li>
-                  </ul>
-                </div>
-                <Button className="mt-6 w-full" variant="outline">
-                  Fale com Vendas
-                </Button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="w-full bg-background py-12 md:py-24" id="depoimentos">
-          <div className="mx-auto w-full max-w-5xl px-4 md:px-6">
-            <div className="flex flex-col items-center text-center">
-              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">O que nossos clientes dizem</h2>
-              <p className="mx-auto mt-4 max-w-[85%] text-base text-muted-foreground sm:text-lg">
-                Milhares de pessoas já transformaram sua produtividade com o Doable.
-              </p>
-            </div>
-
-            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              <div className="rounded-lg bg-muted p-6">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                    <span className="text-lg font-bold text-primary">MC</span>
-                  </div>
-                  <div>
-                    <h4 className="font-bold">Maria Costa</h4>
-                    <p className="text-sm text-muted-foreground">Empreendedora</p>
-                  </div>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  &quot;O Doable revolucionou a forma como organizo meus projetos. Consigo acompanhar todas as tarefas e
-                  nunca mais perco prazos importantes.&quot;
-                </p>
-              </div>
-              <div className="rounded-lg bg-muted p-6">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                    <span className="text-lg font-bold text-primary">RS</span>
-                  </div>
-                  <div>
-                    <h4 className="font-bold">Rafael Silva</h4>
-                    <p className="text-sm text-muted-foreground">Gerente de Projetos</p>
-                  </div>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  &quot;Como gerente de equipe, o Doable me ajuda a delegar tarefas e acompanhar o progresso de todos os
-                  membros em tempo real. Indispensável!&quot;
-                </p>
-              </div>
-              <div className="rounded-lg bg-muted p-6">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                    <span className="text-lg font-bold text-primary">JO</span>
-                  </div>
-                  <div>
-                    <h4 className="font-bold">Juliana Oliveira</h4>
-                    <p className="text-sm text-muted-foreground">Estudante</p>
-                  </div>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  &quot;Uso o Doable para organizar meus estudos e trabalhos acadêmicos. A interface é intuitiva e me ajuda a
-                  manter o foco no que realmente importa.&quot;
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="w-full bg-muted py-12 md:py-24" id="faq">
-          <div className="mx-auto w-full max-w-5xl px-4 md:px-6">
-            <div className="flex flex-col items-center text-center">
-              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">Perguntas Frequentes</h2>
-              <p className="mx-auto mt-4 max-w-[85%] text-base text-muted-foreground sm:text-lg">
-                Tire suas dúvidas sobre o Doable.
-              </p>
-            </div>
-
-            <div className="mx-auto mt-12 max-w-3xl space-y-4">
-              <div className="rounded-lg border border-border bg-background p-6">
-                <h3 className="text-lg font-bold">Como funciona o período de teste gratuito?</h3>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  Oferecemos 14 dias de teste gratuito em todos os planos pagos. Você pode experimentar todos os
-                  recursos sem compromisso e cancelar a qualquer momento.
-                </p>
-              </div>
-              <div className="rounded-lg border border-border bg-background p-6">
-                <h3 className="text-lg font-bold">Posso mudar de plano depois?</h3>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  Sim, você pode fazer upgrade ou downgrade do seu plano a qualquer momento. As mudanças entram em vigor
-                  imediatamente.
-                </p>
-              </div>
-              <div className="rounded-lg border border-border bg-background p-6">
-                <h3 className="text-lg font-bold">O Doable funciona em quais dispositivos?</h3>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  O Doable está disponível para web, iOS e Android. Todos os seus dados são sincronizados
-                  automaticamente entre os dispositivos.
-                </p>
-              </div>
-              <div className="rounded-lg border border-border bg-background p-6">
-                <h3 className="text-lg font-bold">Como funciona o suporte ao cliente?</h3>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  Oferecemos suporte por email para todos os planos e suporte prioritário por chat para os planos pagos.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
         <section className="w-full bg-background py-12 md:py-24">
           <div className="mx-auto w-full max-w-5xl px-4 md:px-6">
             <div className="flex flex-col items-center justify-between gap-6 rounded-lg border border-border bg-background p-8 md:flex-row">
@@ -602,7 +228,7 @@ export default function LandingPage() {
                 </p>
               </div>
               <Button size="lg" asChild className="w-full md:w-auto">
-                <Link href="/signup">Começar Grátis</Link>
+                <Link href="/signup">Começar</Link>
               </Button>
             </div>
           </div>
@@ -620,13 +246,8 @@ export default function LandingPage() {
                 <h4 className="text-sm font-medium">Produto</h4>
                 <ul className="space-y-2">
                   <li>
-                    <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+                    <Link href="#recursos" className="text-sm text-muted-foreground hover:text-foreground">
                       Recursos
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
-                      Preços
                     </Link>
                   </li>
                   <li>
