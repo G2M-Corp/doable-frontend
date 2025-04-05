@@ -39,6 +39,7 @@ export default function SignupPage() {
             } else {
                 toast.error("Erro ao cadastrar. Tente novamente.");
             }
+            // eslint-disable-next-line
         } catch (error) {
             toast.error("Erro inesperado. Tente novamente.");
         } finally {

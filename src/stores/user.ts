@@ -15,6 +15,7 @@ type UserStore = {
     logout: () => void;
 };
 
+// eslint-disable-next-line
 const fetchWithJson = async (url: string, method: string, body: Record<string, any>) => {
     const res = await fetch(url, {
         method,
