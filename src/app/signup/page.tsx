@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Rocket, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import AuthRedirect from "@/components/AuthRedirect";
 
 export default function SignupPage() {
     const { register } = userStore();
@@ -46,6 +47,8 @@ export default function SignupPage() {
     };
 
     return (
+        <>
+        <AuthRedirect />
         <div className="min-h-screen flex flex-col">
             <div className="flex-1 flex items-center justify-center p-4">
                 <div className="w-full max-w-md space-y-8">
@@ -164,5 +167,6 @@ export default function SignupPage() {
                 </div>
             </footer>
         </div>
+        </>
     );
 }
