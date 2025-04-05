@@ -96,14 +96,30 @@ export default function DashboardPage() {
     const [newCategory, setNewCategory] = useState("")
     const [newCategoryColor, setNewCategoryColor] = useState("#4f46e5")
 
-    const toggleTaskCompletion = (id: string) => {
-        setTasks(tasks.map((task) => (task.id === id ? { ...task, completed: !task.completed } : task)))
+    // Task
+    const addTask = () => {
+        if (newTask.trim() !== "") {
+            const task: Task = {
+                id: Date.now().toString(),
+                title: newTask,
+                completed: false,
+                category: newTaskCategory || undefined,
+            }
+            setTasks([task, ...tasks])
+            setNewTask("")
+            setNewTaskCategory("")
+        }
     }
 
     const deleteTask = (id: string) => {
         setTasks(tasks.filter((task) => task.id !== id))
     }
+    
+    const toggleTaskCompletion = (id: string) => {
+        setTasks(tasks.map((task) => (task.id === id ? { ...task, completed: !task.completed } : task)))
+    }
 
+    // Category
     const addCategory = async () => {
         if (newCategory.trim() === "") return
 
@@ -167,20 +183,6 @@ export default function DashboardPage() {
         }
     }
 
-    const addTask = () => {
-        if (newTask.trim() !== "") {
-            const task: Task = {
-                id: Date.now().toString(),
-                title: newTask,
-                completed: false,
-                category: newTaskCategory || undefined,
-            }
-            setTasks([task, ...tasks])
-            setNewTask("")
-            setNewTaskCategory("")
-        }
-    }
-
     const deleteCategory = async (id: string) => {
         const token = localStorage.getItem("token")
         if (!token) return
@@ -222,7 +224,6 @@ export default function DashboardPage() {
             setIsLoadingCategories(false)
         }
     }
-
 
     const getHexColorByCategoryName = (categoryName: string) => {
         const category = categories.find((cat) => cat.name === categoryName)
@@ -272,7 +273,9 @@ export default function DashboardPage() {
                 <aside className="hidden w-64 flex-col border-r border-border bg-muted/40 md:flex">
                     <div className="mt-4 px-4">
                         <h3 className="mb-2 text-sm font-medium">Categorias</h3>
-                        {categories.length > 0 ? (
+                        {isLoadingCategories ? (
+                            <p className="text-sm text-muted-foreground">Carregando categorias...</p>
+                        ) : categories.length > 0 ? (
                             <div className="space-y-1">
                                 {categories.map((category) => (
                                     <div
